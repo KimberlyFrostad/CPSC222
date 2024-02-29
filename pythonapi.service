@@ -1,0 +1,8 @@
+[Unit]
+Description=My Python Script
+
+[Service]
+ExecStart=/usr/bin/python3 /home/kimberly14/CPSC222HW/CPSC222/pythonapi.py
+
+[Install]
+WantedBy=default.target
