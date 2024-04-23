@@ -72,14 +72,19 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
 // Dashboard for authenticated users
 header_section();
-echo "<p>Welcome, " . $_SESSION['username'] . "!</p>";
-echo "<p><a href='final_logout.php'>Logout</a></p>";
+echo "<h3>Welcome, " . $_SESSION['username'] . "! (<a href='final_logout.php'>logout</a>) </h3>";
+echo "<p>Dashboard: </p>";
+echo "<ul>";
+echo "<li><a href='final.php?page=userlist'>User List</a></li>";
+echo "<li><a href='final.php?page=grouplist'>Group List</a></li>";
+echo "<li><a href='final.php?page=syslog'>Syslog</a></li>";
+echo "</ul>";
 
 // Handle different 'page' GET requests for reports
-$page = isset($_GET['page']) ? clean_input($_GET['page']) : "";
+$page = isset($_GET['page']) ? trim(clean_input($_GET['page'])) : "";
 
 // User list report
-if ($page === "user_list") {
+if ($page === "userlist") {
     echo "<h2>User List Report</h2>";
     echo "<table border='1'>";
     $passwd = file("/etc/passwd");
@@ -87,7 +92,7 @@ if ($page === "user_list") {
         echo "<tr><td>$line</td></tr>";
     }
     echo "</table>";
-} elseif ($page === "group_list") {
+} elseif ($page === "grouplist") {
     // Group list report
     echo "<h2>Group List Report</h2>";
     echo "<table border='1'>";
