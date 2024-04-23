@@ -117,12 +117,21 @@ if ($page === "1") {
 } elseif ($page === "3") {
     // Syslog report
     echo "<h4>Syslog Report</h4>";
-    echo "<table border='1'>";
-    $syslog = file("/var/log/syslog");
-    foreach ($syslog as $line) {
-        echo "<tr><td>$line</td></tr>";
+    $syslog_lines = file("/var/log/syslog");
+echo "<table border='1'>";
+echo "<tr><th>Date</th><th>Host Name</th><th>Application[PDI]</th><th>Message</th></tr>";
+foreach ($syslog_lines as $line) {
+    $parts = explode(' ', $line, 5);
+    if (count($parts) === 5) {
+        $date_time = $parts[0] . ' ' . $parts[1] . ' ' . $parts[2];
+        $host_name = $parts[3];
+        $rest = explode(':', $parts[4], 2);
+        $application = $rest[0];
+        $message = $rest[1];
+        echo "<tr><td>$date_time</td><td>$host_name</td><td>$application</td><td>$message</td></tr>";
     }
-    echo "</table>";
+}
+echo "</table>";
 } else {
     if ($page !== "") {
         echo "<p>Invalid page. Please try again.</p>";
