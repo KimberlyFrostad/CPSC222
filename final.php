@@ -1,23 +1,22 @@
 <?php
 session_start();
 
-// Function to clean input using preg_replace
+// cleaning the input
 function clean_input($input) {
     return preg_replace("/[^a-zA-Z0-9]/", "", $input);
 }
 
-// Function to display the header
 function header_section() {
     echo "<h1>CPSC222 Final Exam</h1>";
 }
 
-// Function to display the footer with current date and time
 function footer() {
     $currentDateTime = (new DateTime())->format('Y-m-d H:i:s');
-    echo "<footer>$currentDateTime</footer>";
+echo "<hr>";   
+ echo "<footer>$currentDateTime</footer>";
 }
 
-// Function to authenticate against auth.db
+//authentication with  auth.db
 function authenticate($username, $password) {
     $file = fopen("auth.db", "r");
     while (($line = fgets($file)) !== false) {
@@ -31,14 +30,14 @@ function authenticate($username, $password) {
     return false;
 }
 
-// Log out if the user requests it
+// logout
 if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
     session_destroy();
     header("Location: final.php");
     exit;
 }
 
-// If the user is not logged in, show the login form
+// showing the login form if user is not yet logged in
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header_section();
 
@@ -56,8 +55,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         }
     }
 
-    // Login form
     ?>
+//login
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
@@ -70,10 +69,11 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     return;
 }
 
-// Dashboard for authenticated users
+// add the header for the whole thing and welcome the user
 header_section();
 echo "<h3>Welcome, " . $_SESSION['username'] . "! (<a href='final_logout.php'>logout</a>) </h3>";
 
+//display the dashboard function
 function display_dashboard() {
 echo "<p>Dashboard: </p>";
 echo "<ul>";
@@ -83,7 +83,7 @@ echo "<li><a href='final.php?page=3'>Syslog</a></li>";
 echo "</ul>";
 }
 
-// Handle different 'page' GET requests for reports
+// handling the page and GET requests
 $page = isset($_GET['page']) ? trim(clean_input($_GET['page'])) : "";
 
 if ($page === "1") {
@@ -121,7 +121,7 @@ echo "<p><a href='final.php'>Return to Dashboard</a></p>";
 
 } elseif ($page === "3") {
     // Syslog report
-echo "<p><a href='final.php'>Back to Dashboard</a></p>"; 
+echo "<p><a href='final.php'>Return to Dashboard</a></p>"; 
     echo "<h4>Syslog Report</h4>";
     $syslog_lines = file("/var/log/syslog");
 echo "<table border='1'>";
@@ -145,6 +145,7 @@ display_dashboard();
     }
 }
 
+//footer for the whole thing, just calling the function I made earlier
 footer();
 ?>
 
