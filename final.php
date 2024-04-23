@@ -75,35 +75,48 @@ header_section();
 echo "<h3>Welcome, " . $_SESSION['username'] . "! (<a href='final_logout.php'>logout</a>) </h3>";
 echo "<p>Dashboard: </p>";
 echo "<ul>";
-echo "<li><a href='final.php?page=userlist'>User List</a></li>";
-echo "<li><a href='final.php?page=grouplist'>Group List</a></li>";
-echo "<li><a href='final.php?page=syslog'>Syslog</a></li>";
+echo "<li><a href='final.php?page=1'>User List</a></li>";
+echo "<li><a href='final.php?page=2'>Group List</a></li>";
+echo "<li><a href='final.php?page=3'>Syslog</a></li>";
 echo "</ul>";
 
 // Handle different 'page' GET requests for reports
 $page = isset($_GET['page']) ? trim(clean_input($_GET['page'])) : "";
 
-// User list report
-if ($page === "userlist") {
-    echo "<h2>User List Report</h2>";
+if ($page === "1") {
+    // User list report
+    echo "<h4>User List Report</h4>";
     echo "<table border='1'>";
+    echo "<tr><th>Username</th><th>Password</th><th>UID</th><th>GID</th><th>Display Name</th><th>Home Directory</th><th>Default Shell</th></tr>"; // Header row
     $passwd = file("/etc/passwd");
     foreach ($passwd as $line) {
-        echo "<tr><td>$line</td></tr>";
+        $fields = explode(":", $line);
+        echo "<tr>";
+        foreach ($fields as $field) {
+            echo "<td>$field</td>";
+        }
+        echo "</tr>";
     }
     echo "</table>";
-} elseif ($page === "grouplist") {
+} elseif ($page === "2") {
     // Group list report
-    echo "<h2>Group List Report</h2>";
+    echo "<h4>Group List Report</h4>";
     echo "<table border='1'>";
+    echo "<tr><th>Group Name</th><th>Password</th><th>GID</th><th>Members</th>";
     $group = file("/etc/group");
     foreach ($group as $line) {
-        echo "<tr><td>$line</td></tr>";
+        $fields = explode(":", $line);
+        echo "<tr>";
+        foreach ($fields as $field) {
+            echo "<td>$field</td>";
+        }
+        echo "</tr>";
     }
     echo "</table>";
-} elseif ($page === "syslog") {
+
+} elseif ($page === "3") {
     // Syslog report
-    echo "<h2>Syslog Report</h2>";
+    echo "<h4>Syslog Report</h4>";
     echo "<table border='1'>";
     $syslog = file("/var/log/syslog");
     foreach ($syslog as $line) {
@@ -118,3 +131,4 @@ if ($page === "userlist") {
 
 footer();
 ?>
+
