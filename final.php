@@ -73,19 +73,23 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 // Dashboard for authenticated users
 header_section();
 echo "<h3>Welcome, " . $_SESSION['username'] . "! (<a href='final_logout.php'>logout</a>) </h3>";
+
+function display_dashboard() {
 echo "<p>Dashboard: </p>";
 echo "<ul>";
 echo "<li><a href='final.php?page=1'>User List</a></li>";
 echo "<li><a href='final.php?page=2'>Group List</a></li>";
 echo "<li><a href='final.php?page=3'>Syslog</a></li>";
 echo "</ul>";
+}
 
 // Handle different 'page' GET requests for reports
 $page = isset($_GET['page']) ? trim(clean_input($_GET['page'])) : "";
 
 if ($page === "1") {
     // User list report
-    echo "<h4>User List Report</h4>";
+echo "<p><a href='final.php'>Return to Dashboard</a></p>";    
+echo "<h4>User List Report</h4>";
     echo "<table border='1'>";
     echo "<tr><th>Username</th><th>Password</th><th>UID</th><th>GID</th><th>Display Name</th><th>Home Directory</th><th>Default Shell</th></tr>"; // Header row
     $passwd = file("/etc/passwd");
@@ -100,6 +104,7 @@ if ($page === "1") {
     echo "</table>";
 } elseif ($page === "2") {
     // Group list report
+echo "<p><a href='final.php'>Return to Dashboard</a></p>"; 
     echo "<h4>Group List Report</h4>";
     echo "<table border='1'>";
     echo "<tr><th>Group Name</th><th>Password</th><th>GID</th><th>Members</th>";
@@ -116,6 +121,7 @@ if ($page === "1") {
 
 } elseif ($page === "3") {
     // Syslog report
+echo "<p><a href='final.php'>Back to Dashboard</a></p>"; 
     echo "<h4>Syslog Report</h4>";
     $syslog_lines = file("/var/log/syslog");
 echo "<table border='1'>";
@@ -133,6 +139,7 @@ foreach ($syslog_lines as $line) {
 }
 echo "</table>";
 } else {
+display_dashboard();
     if ($page !== "") {
         echo "<p>Invalid page. Please try again.</p>";
     }
